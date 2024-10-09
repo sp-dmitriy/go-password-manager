@@ -1,0 +1,5 @@
+// rand.Seed(time.Now().UnixNano())
+// rand.IntN(10)
+// for _, ch := range string(str) {
+// 	fmt.Println(ch, string(ch))
+// }
