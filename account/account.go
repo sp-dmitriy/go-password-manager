@@ -2,7 +2,6 @@ package account
 
 import (
 	"errors"
-	"fmt"
 	"math/rand/v2"
 	"net/url"
 	"time"
@@ -43,7 +42,8 @@ func NewAccount(login, password, urlString string) (*Account, error) {
 
 func (acc *Account) Output() {
 	color.Cyan(acc.Login)
-	fmt.Println(acc)
+	color.Cyan(acc.Password)
+	color.Cyan(acc.Url)
 }
 
 func (acc *Account) genPassword(n int) {

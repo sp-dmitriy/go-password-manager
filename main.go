@@ -3,20 +3,23 @@ package main
 import (
 	"demo/go-password/account"
 	"fmt"
+
+	"github.com/fatih/color"
 )
 
 func main() {
 	fmt.Println("--- Password Manager ---")
+	vault := account.NewVault()
 Menu:
 	for {
 		varinat := getMenu()
 		switch varinat {
 		case 1:
-			createAccount()
+			createAccount(vault)
 		case 2:
-			findAccount()
+			findAccount(vault)
 		case 3:
-			deleteAccount()
+			deleteAccount(vault)
 		default:
 			break Menu
 		}
@@ -34,7 +37,7 @@ func getMenu() int {
 	return variant
 }
 
-func createAccount() {
+func createAccount(vault *account.Vault) {
 
 	login := promptData("Введите логин")
 	password := promptData("Введите пароль")
@@ -44,17 +47,29 @@ func createAccount() {
 		fmt.Println("Неверный логин или URL")
 		return
 	}
-	vault := account.NewVault()
 	vault.AddAccount(*myAccount)
+}
+
+func findAccount(vault *account.Vault) {
+	url := promptData("Введите url для поиска")
+	accounts := vault.FindAccountsByUrl(url)
+	if len(accounts) == 0 {
+		color.Red("Аккаунтов не найдено")
+	}
+	for _, account := range accounts {
+		account.Output()
+	}
 
 }
 
-func findAccount() {
-
-}
-
-func deleteAccount() {
-
+func deleteAccount(vault *account.Vault) {
+	url := promptData("Введите url для удаления")
+	isDel := vault.DeleteAccountsByUrl(url)
+	if isDel {
+		color.Green("Запись удалена")
+	} else {
+		color.Red("Не удалось удалить")
+	}
 }
 
 func promptData(prompt string) string {
